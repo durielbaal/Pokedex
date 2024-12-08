@@ -13,5 +13,5 @@ public class DetailsDto {
   private HabitatDto habitat;
   @JsonProperty("flavor_text_entries")
   private List<FlavorTextEntriesDto> flavorTextEntries;
-  private String genus;
+  private List<GeneraDto> genera;
 }

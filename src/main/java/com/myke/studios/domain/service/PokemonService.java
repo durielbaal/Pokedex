@@ -3,21 +3,22 @@ package com.myke.studios.domain.service;
 import com.myke.studios.domain.entity.Pokemon;
 import com.myke.studios.infraestructure.dto.DetailsDto;
 import com.myke.studios.infraestructure.dto.FlavorTextEntriesDto;
+import com.myke.studios.infraestructure.dto.GeneraDto;
 import com.myke.studios.infraestructure.dto.ParametersDto;
 import com.myke.studios.infraestructure.output.PokemonOutputPort;
 import com.myke.studios.shared.Constants;
 import com.myke.studios.shared.UrlMapper;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Queue;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.client.RestTemplate;
 
 @Data
-@AllArgsConstructor
+@RequiredArgsConstructor
+
 public class PokemonService implements PokemonOutputPort {
 
   private final RestTemplate restTemplate;
@@ -42,15 +43,19 @@ public class PokemonService implements PokemonOutputPort {
       DetailsDto detailsDto) {
     String description =  flavorTextEntriesDto != null ?
         flavorTextEntriesDto.getFlavorText() : "Not found an english entry";
+    Optional<GeneraDto> opGeneraDto = detailsDto.getGenera().stream()
+        .filter(entry ->"en".equals(entry.getLanguage().getName()))
+        .findFirst();
+    String specie = opGeneraDto.isPresent() ?
+        opGeneraDto.get().getGenus() : "Not found an english entry";
     return new Pokemon(parametersDto.getId(),
         parametersDto.getName(),
         parametersDto.getHeight(),
         parametersDto.getWeight(),
         description,
-        detailsDto.getGenus(),
+        specie,
         detailsDto.getHabitat().getName(),
         parametersDto.getTypes());
-
   }
 
   private ParametersDto getParameter(int id){
