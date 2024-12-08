@@ -2,41 +2,63 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:tx="http://www.springframework.org/schema/tx"
+  xmlns:jpa="http://www.springframework.org/schema/data/jpa"
   xsi:schemaLocation="http://www.springframework.org/schema/beans
   http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
   http://www.springframework.org/schema/tx
-  http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+  http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+  http://www.springframework.org/schema/data/jpa
+  http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
   <!-- DataSource configuration -->
-<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
-<property name="url" value="jdbc:postgresql://localhost:5432/pokedex"/>
-<property name="driverClassName" value="org.postgresql.Driver"/>
-<property name="username" value="michael"/>
-<property name="password" value="123"/>
-</bean>
+  <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+    <property name="url" value="jdbc:postgresql://localhost:5432/pokedex"/>
+    <property name="driverClassName" value="org.postgresql.Driver"/>
+    <property name="username" value="michael"/>
+    <property name="password" value="123"/>
+  </bean>
 
   <!-- JPA EntityManagerFactory configuration -->
-<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-  <property name="dataSource" ref="dataSource"/>
-  <property name="packagesToScan" value="com.myke.studios.domain.entity"/>
-  <property name="jpaVendorAdapter">
-    <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
-  </property>
-  <property name="jpaProperties">
-    <props>
-      <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
-      <prop key="hibernate.hbm2ddl.auto">update</prop>
-      <prop key="hibernate.show_sql">true</prop>
-    </props>
-  </property>
-</bean>
+  <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+    <property name="dataSource" ref="dataSource"/>
+    <property name="packagesToScan" value="com.myke.studios.domain.entity"/>
+    <property name="jpaVendorAdapter">
+      <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+    </property>
+    <property name="jpaProperties">
+      <props>
+        <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+        <prop key="hibernate.hbm2ddl.auto">update</prop>
+        <prop key="hibernate.show_sql">true</prop>
+      </props>
+    </property>
+  </bean>
 
   <!-- Transaction Manager configuration -->
-<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-  <property name="entityManagerFactory" ref="entityManagerFactory"/>
-</bean>
+  <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+    <property name="entityManagerFactory" ref="entityManagerFactory"/>
+  </bean>
 
   <!-- Enabling annotation-driven transaction management -->
-<tx:annotation-driven/>
+  <tx:annotation-driven/>
+  <!-- Enable JPA Repositories -->
+  <jpa:repositories base-package="com.myke.studios.infrastructure.repository" />
+
+  <!-- configuration converter JSON -->
+  <bean id="jacksonObjectMapper" class="com.fasterxml.jackson.databind.ObjectMapper" />
+
+  <!-- Configuration converter messages JSON in controllers -->
+  <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+    <property name="objectMapper" ref="jacksonObjectMapper" />
+  </bean>
+
+  <!-- Configuration Jackson DispatcherServlet -->
+  <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+    <property name="messageConverters">
+      <list>
+        <ref bean="mappingJacksonHttpMessageConverter" />
+      </list>
+    </property>
+  </bean>
 </beans>
 
