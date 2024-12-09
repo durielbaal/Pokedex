@@ -6,25 +6,28 @@ import com.myke.studios.infraestructure.dto.FlavorTextEntriesDto;
 import com.myke.studios.infraestructure.dto.GeneraDto;
 import com.myke.studios.infraestructure.dto.ParametersDto;
 import com.myke.studios.infraestructure.output.PokemonOutputPort;
+import com.myke.studios.infraestructure.repository.PokemonRepository;
 import com.myke.studios.shared.Constants;
 import com.myke.studios.shared.UrlMapper;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
+@Service
 @Data
 @RequiredArgsConstructor
 
 public class PokemonService implements PokemonOutputPort {
 
   private final RestTemplate restTemplate;
+  private final PokemonRepository pokemonRepository;
 
   @Override
-  public void getPokemonFromTo(int begin, int end) {
+  public void storePokemonFromTo(int begin, int end) {
     for(int i = begin; i <= end; i++) {
       ParametersDto parametersDto = getParameter(i);
       DetailsDto detailsDto =getDetails(i);
@@ -33,9 +36,13 @@ public class PokemonService implements PokemonOutputPort {
           .findFirst();
       FlavorTextEntriesDto flavorTextEntriesDto = optionalFTE.orElse(null);
       Pokemon pokemon = getPokemon(flavorTextEntriesDto, parametersDto, detailsDto);
-      System.out.println("Nº " + i + ": " + pokemon.toString());
-
+      pokemonRepository.save(pokemon);
     }
+  }
+
+  @Override
+  public List<Pokemon> getAllPokemon() {
+    return pokemonRepository.findAll();
   }
 
   private Pokemon getPokemon(FlavorTextEntriesDto flavorTextEntriesDto,

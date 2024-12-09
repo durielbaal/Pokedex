@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 @Data
 @RequiredArgsConstructor
-@RestController(Constants.POKEMON_OWN_URL)
+@RestController
 public class PokemonController  {
 
   private final PokemonOutputPort pokemonOutputPort;
@@ -20,10 +20,14 @@ public class PokemonController  {
   public ResponseEntity<String> getPokemonFromTo() {
     ResponseEntity<String> responseEntity = ResponseEntity.ok("Pokemon of Hoenn were stored correctly");
     try{
-      pokemonOutputPort.getPokemonFromTo(252,386);
+      pokemonOutputPort.storePokemonFromTo(252,386);
     } catch (Exception e) {
         responseEntity = ResponseEntity.badRequest().body("Something was wrong during storage of Hoenn Pokemon");
     }
     return responseEntity;
+  }
+  @GetMapping(Constants.TEST)
+  public ResponseEntity<String> testing() {
+    return  ResponseEntity.ok("This is a test, and works :)");
   }
 }

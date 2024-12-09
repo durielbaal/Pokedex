@@ -2,10 +2,14 @@ package com.myke.studios.domain.entity;
 
 import com.myke.studios.infraestructure.dto.TypeDto;
 import com.myke.studios.infraestructure.dto.TypesDto;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import java.util.List;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,8 +25,8 @@ public class Pokemon {
   private String description;
   private String specie;
   private String habitat;
-
-  @ElementCollection
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(name = "types", joinColumns = @JoinColumn(name = "pokedexNumber"))
   private List<String> types;
 
   public Pokemon (int id, String name, double height, double weight, String description,
