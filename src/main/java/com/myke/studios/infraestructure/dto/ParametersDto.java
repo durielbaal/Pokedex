@@ -14,4 +14,5 @@ public class ParametersDto {
   private double height;
   private double weight;
   private List<TypesDto> types;
+  private SpritesDto sprites;
 }

@@ -62,7 +62,9 @@ public class PokemonService implements PokemonOutputPort {
         description,
         specie,
         detailsDto.getHabitat().getName(),
-        parametersDto.getTypes());
+        parametersDto.getTypes(),
+        parametersDto.getSprites()
+        );
   }
 
   private ParametersDto getParameter(int id){
