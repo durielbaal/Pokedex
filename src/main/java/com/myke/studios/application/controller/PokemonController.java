@@ -11,12 +11,16 @@ import java.util.Map;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 @Data
 @RequiredArgsConstructor
-@RestController(Constants.POKEMON_OWN_BASE)
+@RestController
+@CrossOrigin(origins = "http://localhost:4200/")
+@RequestMapping(Constants.POKEMON_OWN_BASE)
 public class PokemonController  {
 
   private final PokemonOutputPort pokemonOutputPort;

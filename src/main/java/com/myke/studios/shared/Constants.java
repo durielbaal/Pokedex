@@ -7,5 +7,5 @@ public class Constants {
   public static final String POKEMON_OWN_BASE = "/pokedex/";
   public static final String HOENN_SAVE_REGION = "store/Hoenn";
   public static final String GET_HOENN_POKEDEX = "get/Hoenn";
-  public static final String TEST = "pokedex/test";
+  public static final String TEST = "test";
 }

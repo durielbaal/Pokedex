@@ -172,7 +172,6 @@ public class Initializer {
         }
       };
       PokemonService pokemonService = new PokemonService(restTemplate,pokemonRepository);
-      pokemonService.storePokemonFromTo(149,151);
-
+      //pokemonService.storePokemonFromTo(149,151);
     }
 }

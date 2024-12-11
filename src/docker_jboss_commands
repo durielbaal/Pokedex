@@ -1,0 +1,19 @@
+Create Dockerfile in root directory
+
+copy war to docker route of .war
+1:docker cp .\target\project.war <_jboss_container_name>:/opt/jboss/wildfly/standalone/deployments/project.war
+create network between database and jboss
+
+2:create network between wildfly and postgress
+docker network create wildfly-postgres-net
+
+3:connet your network with wildfly and postgress
+docker network connect wildfly-postgres-net quirky_bartik
+docker network connect  wildfly-postgres-net postgres_container
+
+4:create image
+docker build -t pokedex-wildfly .
+
+
+5:execute container
+docker run -d -p 8080:8080 pokedex-wildfly
